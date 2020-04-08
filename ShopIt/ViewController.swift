@@ -17,6 +17,12 @@ class ViewController: UITableViewController {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItem))
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(clearList))
+        
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let share = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
+        
+        toolbarItems = [spacer, share]
+        navigationController?.isToolbarHidden = false
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -52,6 +58,13 @@ class ViewController: UITableViewController {
     @objc func clearList() {
         shoppingItems.removeAll(keepingCapacity: true)
         tableView.reloadData()
+    }
+    
+    @objc func shareTapped() {
+        let list = shoppingItems.joined(separator: "\n")
+        let vc = UIActivityViewController(activityItems: [list], applicationActivities: [])
+         vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem // this only has effect on iPad
+         present(vc, animated: true)
     }
 
 
